@@ -1,0 +1,4 @@
+#!/bin/sh
+
+f95 -o aqplot aqplot.f -lpgplot -lX11
+cp aqplot ../aspicking/
