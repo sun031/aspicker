@@ -2,7 +2,7 @@
 
 import os
 import glob
-import aspicking
+import aspicker
 from multiprocessing import Pool
 
 
@@ -41,29 +41,29 @@ label           = 0
 # initial processing
 files = glob.glob(eventpath)
 files.sort()
-aspicking.init_process(sacfiles=files)
+aspicker.init_process(sacfiles=files)
 
 # converting SAC to AQ
 files = glob.glob("aspicking/waveforms/20040220055845/*.sac")
 files.sort()
-aspicking.sac2aq(sacfiles=files, outpath=aqpath, outpath2=refpath)
+aspicker.sac2aq(sacfiles=files, outpath=aqpath, outpath2=refpath)
 
 # adaptive stacking
 files = glob.glob(aqpath+"/rts*.aq")
 for f in files:
-    aspicking.run_as_fortran(aqfile=f, binname=asname)
+    aspicker.run_as_fortran(aqfile=f, binname=asname)
 
 
 # plotting .aq files
 files = glob.glob(aqpath+"/*.aq")
 for f in files:
-    aspicking.pgplot(aqfile=f, outpath=figurepath, binname=pgplotname,
+    aspicker.pgplot(aqfile=f, outpath=figurepath, binname=pgplotname,
                      device=device, width=width, scale=height_scale,
                      cheight=cheight, line_thickness=line_thickness, label=label)
 
 # assign picks
 # for f in glob.glob(aqpath+"/*.ttr"):
-#     aspicking.picks(ttrfile=f, wavepath=wavepath, refpath=refpath)
+#     aspicker.picks(ttrfile=f, wavepath=wavepath, refpath=refpath)
 
 
 
