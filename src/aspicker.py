@@ -10,6 +10,12 @@ from scipy.ndimage.interpolation import shift
 import numpy as np
 import subprocess
 
+# header instructions
+# user1: snr
+# user2: uncertainty
+# t1: ak135
+# t2: picked traveltime
+# kt1: phase name
 
 def reftime_from_trace(tr):
 
@@ -198,7 +204,7 @@ def sac2aq(sacfiles, min_station=10, outpath="aspicking/aqfiles", outpath2="aspi
     trref = st[index]
     eventid = eventid_from_sac(trref)
     aqfile = outpath + "/rts" + eventid + ".aq"
-    fn = outpath2 + "/" + trref.id + "." + eventid + ".sac"
+    fn = outpath2 + "/" + eventid + "." + trref.id + ".sac"
     trref.write(fn, format="SAC")
 
     # prepare for AQ waveform files
@@ -460,8 +466,13 @@ def picks(ttrfile, wavepath, refpath):
             break
 
     reftr = read(reffile)[0]
-    refpick = reftime_from_trace(reftr) + reftr.stats.sac.t2
-    print refpick
+
+    try:
+        refpick = reftime_from_trace(reftr) + reftr.stats.sac.t2
+    except:
+        print "not valid header t2"
+        return
+    # print refpick
 
     for line in lines[8:]:
         # print line.strip()
